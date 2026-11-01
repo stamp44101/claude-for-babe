@@ -1051,7 +1051,7 @@ countUp();
 .cb{position:fixed;right:20px;bottom:20px;z-index:95;width:400px;max-width:calc(100vw - 32px);height:min(620px,calc(100vh - 40px));background:var(--bg2);border:1px solid rgba(255,143,184,.4);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.55);display:none;flex-direction:column;overflow:hidden}
 .cb.open{display:flex;animation:pop .25s}
 .cb.drag{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(95,211,255,.35),0 30px 80px rgba(0,0,0,.55)}
-@media(max-width:600px){.cb{right:16px;left:16px;bottom:16px;width:auto;max-width:none;height:calc(100vh - 32px)}}
+
 .cb-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,rgba(255,143,184,.14),rgba(95,211,255,.06))}
 .cb-h .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--pink);color:#2a0a17;font-weight:700}
 .cb-h b{font-family:Mitr;font-weight:500;display:block;line-height:1.2}
@@ -1104,13 +1104,28 @@ countUp();
 .cb-lock .er{color:#ffb3ba;font-size:14px;min-height:20px}
 .shake{animation:shk .35s}
 @keyframes shk{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@media(max-width:600px){
+ .cb{left:0;right:0;bottom:auto;top:8px;width:auto;max-width:none;height:calc(100dvh - 8px);border-radius:20px 20px 0 0;border-bottom:0}
+ .cb-h{padding:18px 12px 10px;position:relative;touch-action:none}
+ .cb-h::before{content:"";position:absolute;top:7px;left:50%;width:42px;height:5px;margin-left:-21px;border-radius:9px;background:rgba(255,255,255,.28)}
+ .cb-x{min-width:44px;min-height:44px;font-size:15px}
+ .cb-chips{padding:0 12px 10px}
+ .cb-chips button{min-height:44px;font-size:14px;padding:8px 14px}
+ .pitem button{width:30px;height:30px;line-height:30px;top:-10px;right:-10px;font-size:14px}
+ .pitem button::after{content:"";position:absolute;inset:-7px}
+ .cb-f{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+ .cb-f textarea{font-size:16px}
+ .cb-fab{bottom:calc(16px + env(safe-area-inset-bottom));right:16px}
+}
+.cb-m{overscroll-behavior:contain}
+html.cb-lockscroll,html.cb-lockscroll body{overflow:hidden}
 </style>
 
 <button class="cb-fab" id="cb-fab" aria-label="เปิดแชทถาม Claude">💬 ถาม Claude</button>
 <div class="cb" id="cb" role="dialog" aria-label="แชทกับ Claude">
   <div class="cb-h">
     <div class="av">C</div>
-    <div><b>ถาม Claude ได้เลยอั๊ย</b><small>ส่งรูป / PDF (≤ 2.2 MB) ให้ดูได้ด้วยนะ 📎</small></div>
+    <div><b>ถาม Claude ได้เลยอั๊ย</b><small>📎 ส่งรูป / PDF ≤ 2.2 MB ได้</small></div>
     <div class="sp"></div>
     <button class="cb-x" id="cb-clear" title="เริ่มแชทใหม่">ล้าง</button>
     <button class="cb-x" id="cb-close" aria-label="ปิด">✕</button>
@@ -1259,8 +1274,27 @@ countUp();
       ler.textContent=r.status===401?'passcode ไม่ถูก ลองใหม่นะ':m;
     }catch(err){ler.textContent='เชื่อมต่อไม่ได้ ลองใหม่อีกที';}
     pin.value='';lk.classList.remove('shake');void lk.offsetWidth;lk.classList.add('shake');pin.focus();};
-  fab.onclick=()=>{box.classList.add('open');fab.style.display='none';if(getPass())unlock();else lock();};
-  $('cb-close').onclick=()=>{box.classList.remove('open');fab.style.display='';};
+  const mobile=()=>matchMedia('(max-width:600px)').matches;
+  const vv=window.visualViewport;
+  function fit(){if(!box.classList.contains('open')||!mobile()||!vv){box.style.height='';box.style.top='';return;}
+    box.style.top=(vv.offsetTop+8)+'px';box.style.height=(vv.height-8)+'px';list.scrollTop=list.scrollHeight;}
+  if(vv){vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);}
+  function openChat(){box.classList.add('open');fab.style.display='none';box.style.transform='';
+    if(mobile()){document.documentElement.classList.add('cb-lockscroll');try{history.pushState({cb:1},'')}catch(e){}}
+    fit();if(getPass())unlock();else lock();}
+  function closeChat(fromPop){if(!box.classList.contains('open'))return;box.classList.remove('open');fab.style.display='';
+    document.documentElement.classList.remove('cb-lockscroll');box.style.transform='';inp.blur();
+    if(!fromPop&&history.state&&history.state.cb){try{history.back()}catch(e){}}}
+  window.addEventListener('popstate',()=>closeChat(true));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChat();});
+  fab.onclick=openChat;
+  $('cb-close').onclick=()=>closeChat();
+  /* swipe down on header to close (mobile) */
+  const hd=box.querySelector('.cb-h');let y0=null,dy=0;
+  hd.addEventListener('touchstart',e=>{if(e.target.closest('button'))return;y0=e.touches[0].clientY;dy=0;box.style.transition='none';},{passive:true});
+  hd.addEventListener('touchmove',e=>{if(y0===null)return;dy=Math.max(0,e.touches[0].clientY-y0);box.style.transform=`translateY(${dy}px)`;},{passive:true});
+  hd.addEventListener('touchend',()=>{if(y0===null)return;box.style.transition='transform .2s';
+    if(dy>90){box.style.transform='translateY(100%)';setTimeout(()=>closeChat(),180);}else box.style.transform='';y0=null;});
   $('cb-clear').onclick=()=>{hist=[];pending=[];renderPend();save();render();};
   $('cb-f').onsubmit=e=>{e.preventDefault();ask(inp.value);};
   inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask(inp.value);}});
