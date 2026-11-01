@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ถึงอั๊ย · P&amp;ID Review</title>
+<meta name="description" content="P&ID review ของ R-101 Reformer เทียบกับ HAZOP Memo 6 — ทำให้อั๊ยโดยเฉพาะ">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💛</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Mitr:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#081626; --bg2:#0c1f35; --panel:#0f2740; --panel2:#132f4d;
+  --line:#2a5a86; --grid:rgba(120,180,240,.07);
+  --ink:#e8f1fb; --dim:#9bb4cf; --faint:#6b87a6;
+  --cyan:#5fd3ff; --pink:#ff8fb8; --gold:#ffd166;
+  --red:#ff5d6c; --amber:#ffb547; --violet:#b69cff; --green:#5ee0a0;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Thai",system-ui,sans-serif;line-height:1.65;font-size:16px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),linear-gradient(rgba(120,180,240,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(120,180,240,.035) 1px,transparent 1px);
+  background-size:96px 96px,96px 96px,24px 24px,24px 24px;background-attachment:fixed}
+a{color:var(--cyan)}
+.mono{font-family:"IBM Plex Mono",monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+@media(max-width:600px){.wrap{padding:0 16px}}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:rgba(8,22,38,.82);backdrop-filter:blur(10px);border-bottom:1px solid rgba(95,211,255,.15)}
+nav .wrap{display:flex;gap:6px;align-items:center;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav .brand{font-family:Mitr;color:var(--pink);margin-right:10px;white-space:nowrap}
+nav a{color:var(--dim);text-decoration:none;font-size:14px;padding:6px 12px;border-radius:999px;white-space:nowrap;border:1px solid transparent}
+nav a:hover,nav a.on{color:var(--ink);border-color:rgba(95,211,255,.35);background:rgba(95,211,255,.08)}
+
+/* hero */
+.hero{padding:90px 0 60px;position:relative;overflow:hidden}
+.titleblock{border:1.5px solid var(--line);border-radius:4px;display:inline-grid;grid-template-columns:auto auto;font-size:12px;color:var(--dim);margin-bottom:34px}
+.titleblock div{padding:6px 14px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.titleblock div:nth-child(2n){border-right:0}
+.titleblock div:nth-last-child(-n+2){border-bottom:0}
+.titleblock b{color:var(--ink);font-weight:600}
+.hello{font-family:Mitr;font-size:clamp(54px,11vw,120px);line-height:1;margin:0;letter-spacing:-1px}
+.hello span{color:var(--pink);display:inline-block;animation:beat 1.6s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.14)}30%{transform:scale(1)}45%{transform:scale(1.08)}}
+.sub{font-size:clamp(19px,2.6vw,26px);color:var(--dim);margin:18px 0 0;max-width:760px}
+.sub b{color:var(--ink)}
+.note{margin-top:34px;max-width:720px;background:linear-gradient(135deg,rgba(255,143,184,.12),rgba(95,211,255,.06));border:1px solid rgba(255,143,184,.3);border-radius:var(--r);padding:22px 24px;font-size:17px}
+.note .sig{display:block;margin-top:10px;color:var(--pink);font-family:Mitr}
+.flow-svg{position:absolute;right:-40px;top:40px;width:520px;opacity:.5;pointer-events:none}
+@media(max-width:900px){.flow-svg{display:none}}
+.dash{stroke-dasharray:6 6;animation:dash 1.2s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-12}}
+
+/* scoreboard */
+.score{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
+@media(max-width:760px){.score{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 18px 16px;position:relative;overflow:hidden}
+.stat .n{font-family:"IBM Plex Mono";font-size:44px;font-weight:600;line-height:1}
+.stat .l{color:var(--dim);font-size:14px;margin-top:6px}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.stat .n{color:var(--c)}
+
+/* sections */
+section{padding:70px 0 10px}
+.kicker{font-family:"IBM Plex Mono";color:var(--cyan);font-size:13px;letter-spacing:2px;text-transform:uppercase}
+h2{font-family:Mitr;font-weight:500;font-size:clamp(28px,4.2vw,42px);margin:6px 0 10px;line-height:1.2}
+.lead{color:var(--dim);max-width:760px;margin:0 0 28px}
+
+/* big 3 */
+.big3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.big3{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.big3 .card{border-color:rgba(255,93,108,.45);background:linear-gradient(180deg,rgba(255,93,108,.10),var(--panel) 55%)}
+.big3 .num{font-family:"IBM Plex Mono";color:var(--red);font-size:13px;letter-spacing:1px}
+.big3 h3{font-family:Mitr;font-weight:500;margin:6px 0 8px;font-size:21px;line-height:1.35}
+.big3 p{margin:0;color:var(--dim);font-size:15px}
+
+/* interactive pid */
+.pidbox{display:grid;grid-template-columns:1.55fr 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.pidbox{grid-template-columns:1fr}}
+.sheet{background:#fdfdfb;border-radius:10px;padding:10px;position:relative;box-shadow:0 0 0 1px var(--line),0 20px 60px rgba(0,0,0,.4)}
+.sheet .canvas{position:relative}
+.sheet img{display:block;width:100%;height:auto;border-radius:4px}
+.hs{position:absolute;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;border:0;background:var(--red);color:#fff;font:600 13px "IBM Plex Mono";cursor:pointer;box-shadow:0 0 0 0 rgba(255,93,108,.6);animation:ping 2s infinite;z-index:2;display:grid;place-items:center;padding:0}
+.hs:hover,.hs.on{background:#d61f3a;animation:none;box-shadow:0 0 0 6px rgba(255,93,108,.3);z-index:3}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,93,108,.55)}70%{box-shadow:0 0 0 12px rgba(255,93,108,0)}100%{box-shadow:0 0 0 0 rgba(255,93,108,0)}}
+@media(max-width:600px){.hs{width:22px;height:22px;font-size:11px}}
+.sheet .cap{display:flex;justify-content:space-between;color:#4a5d73;font:12px "IBM Plex Mono";padding:8px 4px 2px;gap:8px;flex-wrap:wrap}
+.detail{position:sticky;top:76px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-height:300px}
+.detail .tag{font-family:"IBM Plex Mono";color:var(--cyan);font-size:13px}
+.detail h3{font-family:Mitr;font-weight:500;font-size:22px;margin:4px 0 12px;line-height:1.35}
+.detail dl{margin:0;display:grid;gap:12px}
+.detail dt{font-size:12px;color:var(--faint);letter-spacing:1px;text-transform:uppercase;font-family:"IBM Plex Mono"}
+.detail dd{margin:2px 0 0;font-size:15.5px}
+.detail .fix{background:rgba(94,224,160,.08);border:1px solid rgba(94,224,160,.3);border-radius:10px;padding:10px 12px}
+.detail .nav2{display:flex;justify-content:space-between;margin-top:18px;gap:8px}
+.btn{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;font-size:14px;cursor:pointer}
+.btn:hover{border-color:var(--cyan)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap;font-weight:500}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-wrong{color:var(--red)} .s-verify{color:var(--violet)} .s-partial{color:var(--amber)} .s-suggest{color:var(--cyan)} .s-ok{color:var(--green)}
+.sev{font-family:"IBM Plex Mono";font-size:12px;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,.06);color:var(--dim)}
+.sev.hi{background:rgba(255,93,108,.15);color:#ffb3ba}
+.sev.md{background:rgba(255,181,71,.13);color:#ffd59a}
+.sev.lo{background:rgba(95,211,255,.1);color:#a9e6ff}
+
+/* hazop */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filters button{font:inherit;font-size:14px;background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.hz{display:grid;gap:14px}
+.hrow{display:grid;grid-template-columns:160px 1fr 1fr;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media(max-width:820px){.hrow{grid-template-columns:1fr}}
+.hrow .id{padding:18px;background:var(--panel2);display:flex;flex-direction:column;gap:8px;border-right:1px solid var(--line)}
+@media(max-width:820px){.hrow .id{flex-direction:row;align-items:center;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}}
+.hrow .id .code{font:600 30px "IBM Plex Mono";line-height:1}
+.risk{font:600 12px "IBM Plex Mono";padding:3px 8px;border-radius:6px;text-align:center;color:#081626}
+.rv{background:#ff3b5c}.rh{background:#ff7a59}.rm{background:var(--amber)}
+.hrow .col{padding:18px 20px}
+.hrow .col+.col{border-left:1px dashed rgba(95,211,255,.2)}
+@media(max-width:820px){.hrow .col+.col{border-left:0;border-top:1px dashed rgba(95,211,255,.2)}}
+.hrow h4{margin:0 0 4px;font-size:16px;font-weight:600}
+.hrow .lbl{font:12px "IBM Plex Mono";color:var(--faint);letter-spacing:1px;text-transform:uppercase;margin:12px 0 2px}
+.hrow .lbl:first-child{margin-top:0}
+.hrow p{margin:0;font-size:15px}
+.hrow .ev{font:12px "IBM Plex Mono";color:var(--faint);margin-top:12px}
+.hrow.hide{display:none}
+
+/* checklist */
+.prog{height:10px;background:var(--panel2);border-radius:999px;overflow:hidden;margin:4px 0 22px;border:1px solid var(--line)}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--pink));transition:width .4s}
+.todo{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:t}
+.todo li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;grid-template-columns:28px 1fr;gap:12px;cursor:pointer;transition:.2s}
+.todo li:hover{border-color:var(--cyan)}
+.todo input{width:22px;height:22px;accent-color:var(--pink);margin:2px 0 0;cursor:pointer}
+.todo b{font-weight:600}
+.todo small{display:block;color:var(--dim);font-size:14px}
+.todo li.done{opacity:.5}
+.todo li.done b{text-decoration:line-through}
+.celebrate{display:none;text-align:center;font-family:Mitr;font-size:22px;color:var(--pink);margin-top:16px}
+.celebrate.show{display:block;animation:pop .5s}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* questions */
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.qs .card{border-color:rgba(182,156,255,.4)}
+.qs .q{font:600 13px "IBM Plex Mono";color:var(--violet)}
+.qs p{margin:6px 0 0}
+
+/* PSA */
+.psa-list{columns:2;column-gap:28px;margin:22px 0 0;padding-left:22px}
+@media(max-width:760px){.psa-list{columns:1}}
+.psa-list li{break-inside:avoid;margin-bottom:10px;color:var(--dim)}
+.psa-list li b{color:var(--ink);font-weight:600}
+.stray{display:flex;gap:16px;align-items:center;background:var(--panel);border:1px dashed rgba(255,93,108,.5);border-radius:12px;padding:12px;margin-bottom:16px}
+.stray img{width:180px;max-width:40%;background:#fff;border-radius:6px}
+
+footer{margin-top:90px;padding:40px 0 60px;border-top:1px solid var(--line);color:var(--faint);font-size:14px}
+footer .love{font-family:Mitr;font-size:28px;color:var(--pink);margin-bottom:12px}
+.reveal{opacity:0;transform:translateY(18px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="brand">ถึงอั๊ย 💛</span>
+  <a href="#tldr">สรุป</a><a href="#pid">P&amp;ID R-101</a><a href="#hazop">HAZOP × P&amp;ID</a><a href="#todo">ต้องแก้</a><a href="#ask">ต้องยืนยัน</a><a href="#psa">PSA (Memo 2)</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <svg class="flow-svg" viewBox="0 0 520 300" fill="none" aria-hidden="true">
+    <rect x="200" y="60" width="70" height="150" rx="35" stroke="#5fd3ff" stroke-width="2"/>
+    <path d="M214 92h42M214 100h42" stroke="#5fd3ff"/>
+    <path d="M20 140h180" stroke="#5fd3ff" stroke-width="2"/><path class="dash" d="M20 140h180" stroke="#ff8fb8" stroke-width="2"/>
+    <path d="M270 120h230" stroke="#5fd3ff" stroke-width="2"/><path class="dash" d="M270 120h230" stroke="#ff8fb8" stroke-width="2"/>
+    <circle cx="380" cy="60" r="18" stroke="#5fd3ff" stroke-width="1.6"/><text x="380" y="64" fill="#5fd3ff" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">PIC</text>
+    <path d="M380 78v42" stroke="#5fd3ff" stroke-dasharray="4 4"/>
+    <circle cx="110" cy="70" r="18" stroke="#5fd3ff" stroke-width="1.6"/><text x="110" y="74" fill="#5fd3ff" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">FIC</text>
+    <path d="M110 88v52" stroke="#5fd3ff" stroke-dasharray="4 4"/>
+    <text x="235" y="240" fill="#5fd3ff" font-size="14" text-anchor="middle" font-family="IBM Plex Mono">R-101</text>
+  </svg>
+  <div class="titleblock mono">
+    <div>PROJECT</div><div><b>Bioethanol → H₂</b></div>
+    <div>DWG</div><div><b>P&amp;ID R-101 Reformer</b></div>
+    <div>CHECKED vs</div><div><b>HAZOP Memo 6 · BFD · Memo 5&amp;6</b></div>
+    <div>FOR</div><div><b>อั๊ย 💛</b></div>
+  </div>
+  <h1 class="hello">ถึงอั๊ย <span>💛</span></h1>
+  <p class="sub">ตรวจ <b>P&amp;ID ใหม่ของ R-101</b> เทียบกับ <b>HAZOP ใน Memo 6</b> ให้แล้วนะ ภาพรวมได้ประมาณครึ่งหนึ่ง: safeguard หลักมีครบ แต่ยังมี <b>3 จุดใหญ่</b> ที่ต้องแก้ก่อนส่ง</p>
+  <div class="note">กดเลขสีแดงบนแบบเพื่อดูแต่ละจุด ติ๊กเช็คลิสต์ตอนแก้เสร็จได้ ระบบจำไว้ให้ในเครื่อง แก้ทีละข้อนะ ไม่ต้องรีบ เป็นกำลังใจให้ 🫶<span class="sig">— แสตมป์</span></div>
+  <div class="score">
+    <div class="stat" style="--c:var(--red)"><div class="n" id="c-wrong">0</div><div class="l">ยืนยันว่าผิด</div></div>
+    <div class="stat" style="--c:var(--amber)"><div class="n" id="c-partial">0</div><div class="l">ตรงบางส่วน / recommendation ยังไม่แก้</div></div>
+    <div class="stat" style="--c:var(--violet)"><div class="n" id="c-verify">0</div><div class="l">อาจผิด ต้องยืนยัน</div></div>
+    <div class="stat" style="--c:var(--cyan)"><div class="n" id="c-find">0</div><div class="l">จุดบนแบบที่ต้องดู</div></div>
+  </div>
+</div></header>
+
+<main class="wrap">
+
+<section id="tldr" class="reveal">
+  <div class="kicker">01 · TL;DR</div>
+  <h2>3 จุดใหญ่ที่ต้องแก้ก่อน</h2>
+  <div class="big3">
+    <div class="card"><div class="num">CRITICAL · 1A / 2C</div><h3>Fuel cut-off ตัดไม่ครบ</h3><p>I-101 ปิดแค่ XV-101 บน natural gas makeup แต่เชื้อเพลิงหลักของ F-101 คือ <b>PSA tail gas (6.01 MW, 73.7%)</b> ซึ่งเส้นนี้ไม่มีในแบบเลย</p></div>
+    <div class="card"><div class="num">CRITICAL · 3A (Very High)</div><h3>High-P trip ไม่ได้หยุด feed</h3><p>ถ้า outlet ตัน interlock จะตัดแค่ไฟ แต่ feed ยังไหลเข้า R-101 ต่อ ควรมี XV บน feed ให้ I-101 สั่งปิด</p></div>
+    <div class="card"><div class="num">ต้องยืนยัน · R-101</div><h3>แก๊สไม่ผ่าน catalyst bed</h3><p>feed เข้ากลางถัง ออกกลางถัง แต่ catalyst วาดไว้ด้านบน และไม่ชัดว่า R-101 รับความร้อนจาก F-101 ยังไง</p></div>
+  </div>
+</section>
+
+<section id="pid" class="reveal">
+  <div class="kicker">02 · Interactive drawing</div>
+  <h2>กดเลขบนแบบเพื่อดูแต่ละจุด</h2>
+  <p class="lead">ใช้ปุ่มก่อนหน้า/ถัดไป หรือกดลูกศร ← → บนคีย์บอร์ดก็ได้</p>
+  <div class="pidbox">
+    <div class="sheet"><div class="canvas" id="r101"><img src="assets/r101-pid@2x.png" alt="P&ID R-101 Reformer และ F-101" width="1240" height="662"></div>
+      <div class="cap"><span>P&amp;ID check.png · R-101 / F-101</span><span>620×331 px (ภาพต้นฉบับความละเอียดต่ำ)</span></div></div>
+    <aside class="detail" id="r101-detail" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section id="hazop" class="reveal">
+  <div class="kicker">03 · HAZOP × P&amp;ID</div>
+  <h2>เทียบ HAZOP ทีละแถว</h2>
+  <p class="lead">อ้างอิง Memo 6 ตารางที่ 14 (หน้า 32–34) เทียบสิ่งที่ HAZOP บอกว่ามี/ต้องเพิ่ม กับสิ่งที่วาดจริงในแบบ</p>
+  <div class="filters" id="hz-filter">
+    <button class="on" data-f="all">ทั้งหมด</button>
+    <button data-f="wrong">ยืนยันว่าผิด</button>
+    <button data-f="partial">ตรงบางส่วน</button>
+    <button data-f="verify">ต้องยืนยัน</button>
+  </div>
+  <div class="hz" id="hz"></div>
+</section>
+
+<section id="todo" class="reveal">
+  <div class="kicker">04 · Fix list</div>
+  <h2>ลำดับแก้แบบ</h2>
+  <p class="lead">เรียงจากสำคัญที่สุด ติ๊กแล้วระบบจำไว้ในเครื่องนี้</p>
+  <div class="prog"><i id="bar"></i></div>
+  <ol class="todo" id="todo-list"></ol>
+  <div class="celebrate" id="yay">แก้ครบแล้ว เก่งมาก 🎉💛 ไปพักได้แล้ว</div>
+</section>
+
+<section id="ask" class="reveal">
+  <div class="kicker">05 · Open questions</div>
+  <h2>ข้อมูลที่ยังต้องยืนยัน</h2>
+  <p class="lead">ถ้าได้คำตอบข้อพวกนี้จะตัดสินข้อที่ยังค้างได้ทั้งหมด</p>
+  <div class="qs">
+    <div class="card"><div class="q">Q1 · R-101 type</div><p>เป็น fired tubular reformer (catalyst อยู่ใน tube ใน F-101) หรือเป็นถังแยกที่รับความร้อนผ่าน heat exchanger?</p></div>
+    <div class="card"><div class="q">Q2 · I-101 cause &amp; effect</div><p>I-101 trip อะไรบ้าง: ตัดแค่ NG หรือตัด tail gas และ feed ด้วย?</p></div>
+    <div class="card"><div class="q">Q3 · Tail gas route</div><p>Tail gas เข้าแค่ F-101 หรือแบ่งไป E-104 ด้วย? (สไลด์ 13 เขียนว่า "R-101 / F-101 &amp; E-104")</p></div>
+    <div class="card"><div class="q">Q4 · Relief</div><p>Design pressure ของ R-101 และ set pressure ของ PSV คือเท่าไหร่?</p></div>
+    <div class="card"><div class="q">Q5 · Drawing scope</div><p>เส้น tail gas/air อยู่ในแบบแผ่นอื่นหรือเปล่า? ถ้าอยู่ ข้อ #1 จะลดเหลือแค่ต้องใส่ off-page connector</p></div>
+    <div class="card"><div class="q">Q6 · Source file</div><p>ขอไฟล์ต้นฉบับ (.drawio/PDF) หน่อย ตอนนี้ tag ตัวเล็กอ่านได้แค่พอเดา</p></div>
+  </div>
+</section>
+
+<section id="psa" class="reveal">
+  <div class="kicker">06 · Bonus · Memo 2 รูปที่ 3</div>
+  <h2>P&amp;ID ส่วน PSA ที่ตรวจก่อนหน้า</h2>
+  <p class="lead">concept 2-bed PSA ใช้ได้ แต่มีจุดต้องแก้ตามนี้ กดเลขบนแบบเพื่อดูได้เหมือนกัน</p>
+  <div class="stray"><img src="assets/psa-stray.png" alt="กราฟิกที่หลุดมาในแบบ"><div><b>#1 ลบรูป "Young Fan" มุมซ้ายบนออก</b><br><span style="color:var(--dim)">เป็นกราฟิกที่หลุดมา ไม่ใช่ส่วนของ P&amp;ID</span></div></div>
+  <div class="pidbox">
+    <div class="sheet"><div class="canvas" id="psa-c"><img src="assets/psa-pid.png" alt="P&ID PSA AB-101 และ AB-102" width="924" height="590"></div>
+      <div class="cap"><span>Memo 2 · รูปที่ 3 · PSA Purification</span><span>AB-101 / AB-102</span></div></div>
+    <aside class="detail" id="psa-detail" aria-live="polite"></aside>
+  </div>
+  <ul class="psa-list">
+    <li><b>V-101 ชนกับชื่อถังใน Memo 4</b>: Memo 4 ใช้ V-101 เป็น knock-out drum ส่วนวาล์วควรใช้ tag XV/PV</li>
+    <li><b>Instrument ไม่มีเลข loop</b>: ใส่เช่น PT-101 / PC-101</li>
+    <li><b>การสลับหอ</b>: ควรใช้ sequence controller/PLC (timer) ให้ pressure เป็นแค่ permissive</li>
+    <li><b>เพิ่ม AT วัด H₂ purity</b>: จำเป็นถ้าจะอ้าง fuel-cell grade และควรมี check valve, block/bypass และ drain/vent ด้วย</li>
+    <li><b>Off-page</b>: ระบุว่ามาจาก S-102 และ tail gas ไป F-101</li>
+    <li><b>เนื้อหา 5. ใน Memo 2</b>: ประโยค "ในขณะที่อีกหอหนึ่งจะทำการลดความดัน…" พิมพ์ซ้ำ 2 รอบ</li>
+  </ul>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <div class="love">สู้ ๆ นะอั๊ย 💛</div>
+  <div>Sources: <span class="mono">P&amp;ID check.png</span> · Memo 6 ตารางที่ 14 (หน้า 32–34) · <span class="mono">BFD_Base case.jpg</span> · Memo5&amp;6 สไลด์ 13, 16, 20 · Memo 2 รูปที่ 3 · Memo 4 (Compression &amp; PSA section)</div>
+  <div style="margin-top:8px">เป็นการตรวจระดับ conceptual design จากเอกสารที่มี ไม่ได้รับรองว่าแบบผ่านมาตรฐานหรือปลอดภัยครบถ้วน</div>
+</div></footer>
+
+<script>
+const ST={wrong:["s-wrong","ยืนยันว่าผิด"],partial:["s-partial","ตรงบางส่วน"],verify:["s-verify","อาจผิด ต้องยืนยัน"],suggest:["s-suggest","ข้อเสนอเพิ่มเติม"]};
+const SV={hi:["hi","สูง"],md:["md","กลาง"],lo:["lo","ต่ำ"]};
+const chip=s=>`<span class="chip ${ST[s][0]}">${ST[s][1]}</span>`;
+const sev=s=>`<span class="sev ${SV[s][0]}">ความสำคัญ: ${SV[s][1]}</span>`;
+
+/* R-101 findings: pts in px of 620x331 original */
+const R101=[
+ {n:1,pts:[[260,252],[220,292]],tag:"F-101 fuel inlet · XV-101",t:"ไม่มีเส้น PSA tail gas และ combustion air",s:"wrong",v:"hi",
+  f:"BFD กับสไลด์ 13 บอกว่า PSA tail gas (Stream 16) ให้ความร้อน 6.01 MW (73.7%) แต่แบบมีแค่ natural gas makeup (NG) และไม่มีเส้น air",
+  i:"เชื้อเพลิง 74% ไม่อยู่ในแบบ ทำให้ fuel cut-off ตาม HAZOP 1A/2C ตัดได้แค่ส่วนเล็ก ๆ",
+  fix:"เพิ่มเส้น tail gas เข้า F-101 พร้อม XV ที่ I-101 สั่งปิด และให้ระบายไป flare ตอน trip, เพิ่มเส้น combustion air",
+  ev:"BFD_Base case.jpg (block 6) · Memo5&6 สไลด์ 13"},
+ {n:2,pts:[[220,172]],tag:"I-101 Safety Interlock",t:"Interlock ไม่ตัด feed",s:"wrong",v:"hi",
+  f:"I-101 รับสัญญาณจาก FIC/TIC/PIC-101 แต่ส่ง output ไปที่ XV-101 (NG) ตัวเดียว",
+  i:"HAZOP 3A (blocked outlet, Very High 15): ตัดไฟแล้วแต่ feed ยังไหลเข้า ความดันก็ยังขึ้นต่อ",
+  fix:"เพิ่ม XV บน feed line และทำตาราง cause & effect ว่า trip ไหนปิดวาล์วตัวไหน",
+  ev:"P&ID check.png · Memo 6 ตารางที่ 14 แถว 3A"},
+ {n:3,pts:[[342,108]],tag:"TT / FT / PT-101",t:"Interlock ใช้ transmitter ตัวเดียวกับ control loop",s:"verify",v:"md",
+  f:"สัญญาณที่เข้า I-101 มาจาก controller ตัวเดียวกับที่ใช้คุมกระบวนการ",
+  i:"ถ้า transmitter เสีย (ซึ่งเป็น cause ใน HAZOP 1B/2A) ทั้ง control และ trip จะใช้ไม่ได้พร้อมกัน",
+  fix:"(ข้อเสนอใหม่) เพิ่ม TSHH/FSLL/PSHH แยกออกมา ถ้าอาจารย์ต้องการระดับ SIS ส่วนระดับ conceptual ให้ยืนยันกับอาจารย์ก่อน",
+  ev:"P&ID check.png · Memo 6 แถว 1B, 2A"},
+ {n:4,pts:[[259,95],[262,188]],tag:"R-101 nozzles · เส้นประ R-101→F-101",t:"ทางไหลไม่ผ่าน catalyst bed",s:"verify",v:"hi",
+  f:"feed เข้ากลางถังด้านซ้าย outlet ออกกลางถังด้านขวา แต่ catalyst (XXXX) อยู่ด้านบน และเส้นประ (ซึ่งหมายถึงสัญญาณ) ถูกใช้แทนการส่งความร้อนจาก F-101",
+  i:"ถ้าอ่านตามแบบ แก๊สจะไม่ผ่าน bed และคนอ่านอาจตีความเส้นประว่าเป็น signal",
+  fix:"ย้าย nozzle ให้ feed เข้าด้านหนึ่งของ bed และออกอีกด้าน ถ้าเป็น fired tubular reformer ให้วาด tube อยู่ใน F-101",
+  ev:"P&ID check.png · BFD (Heat duty 5.99 MW F-101→R-101)"},
+ {n:5,pts:[[420,47]],tag:"PSV (ไม่มี tag)",t:"PSV ไม่มี tag และวาด discharge เป็นเส้นประ",s:"wrong",v:"md",
+  f:"PSV ต่อจาก top ของ R-101 ไป Safe Vent/Flare แต่เส้น discharge เป็นเส้นประ ไม่มี tag และไม่มี set pressure",
+  i:"HAZOP 3A ระบุ action ให้ verify PRV capacity และทาง discharge แต่แบบยังไม่มีข้อมูลให้เช็ค",
+  fix:"เปลี่ยนเป็นเส้นทึบ (process line) ใส่ tag PSV-101 และ set pressure",
+  ev:"P&ID check.png · Memo 6 แถว 3A"},
+ {n:6,pts:[[438,100]],tag:"Syngas outlet valve",t:"Control valve ไม่มี tag และวาล์วทุกตัวไม่ระบุ fail position",s:"wrong",v:"md",
+  f:"วาล์วบน syngas outlet ที่ PIC-101 คุมไม่มี tag และ FCV/TCV/XV/PCV ไม่ระบุ FC/FO",
+  i:"HAZOP 2C มี action ให้เช็ค shutdown sequence ตอนไฟดับ ซึ่งต้องรู้ fail position ก่อน",
+  fix:"ตั้ง tag PCV-101 และระบุ fail position เช่น XV และ TCV ควรเป็น FC",
+  ev:"P&ID check.png · Memo 6 แถว 2C"},
+ {n:7,pts:[[342,167]],tag:"ทุก loop (TIC/FIC/PIC)",t:"ไม่มี alarm tag ตามที่ HAZOP เขียนไว้",s:"partial",v:"md",
+  f:"HAZOP ระบุ existing safeguard เป็น High-T/Low-T/Low-low flow/High-P/Low-P alarm แต่ในแบบไม่มี alarm tag กำกับเลย",
+  i:"แยกไม่ออกว่าอะไรเป็น existing safeguard และอะไรเป็น recommendation",
+  fix:"ใส่ TAH, TAL, FAL, FALL, FAH, PAH, PAL ข้าง bubble ที่เกี่ยวข้อง",
+  ev:"Memo 6 ตารางที่ 14 คอลัมน์ Existing Safeguards"},
+ {n:8,pts:[[60,112],[555,100],[540,217]],tag:"Off-page connectors",t:"Off-page ไม่ระบุต้นทาง/ปลายทาง",s:"partial",v:"lo",
+  f:"Superheated Feed, Syngas Outlet และ Flue Gas to CCU ไม่มี tag ต้นทาง/ปลายทางและไม่มี line number",
+  i:"ไล่ตามแบบข้ามแผ่นไม่ได้",
+  fix:"เช่น From E-104 · To E-103/R-102 · To CCU via B-201 และใส่ line number",
+  ev:"BFD · PFD.jpg"},
+ {n:9,pts:[[248,232]],tag:"F-101 Furnace",t:"ไม่มี BMS / flame detection",s:"suggest",v:"md",
+  f:"F-101 ไม่มี flame detection, O₂ analyzer หรือ stack/bypass กรณี CCU หยุด",
+  i:"ถ้าเกิด flame failure ระบบจะไม่ trip",
+  fix:"(ข้อเสนอใหม่) เพิ่ม BSL (flame failure) เข้า I-101 และพิจารณา AT-O₂ บน flue gas",
+  ev:"ข้อเสนอเพิ่ม · ไม่อยู่ใน HAZOP"},
+ {n:10,pts:[[259,140]],tag:"R-101",t:"ไม่มี N₂ purge, drain/vent และ sample point",s:"partial",v:"md",
+  f:"สไลด์ 16 บอกว่าต้องทำ N₂ passivation ก่อนเปิด R-101 (Ni⁰ เป็น pyrophoric) และ HAZOP 3B ให้ประเมิน air ingress แต่แบบไม่มี N₂ connection",
+  i:"recommendation ข้อ 3B ยังไม่ถูกนำมาใส่ในแบบ",
+  fix:"เพิ่ม N₂ connection พร้อม isolation, drain/vent และ sample point บน syngas outlet",
+  ev:"Memo5&6 สไลด์ 16 · Memo 6 แถว 3B"}
+];
+
+const PSA=[
+ {n:2,pts:[[528,173],[785,122]],tag:"V-106 ×2",t:"Tag ซ้ำ V-106",s:"wrong",v:"md",f:"V-106 ใช้ทั้งวาล์ว outlet ของ AB-102 และวาล์วคุม H₂ Product",i:"เนื้อหาหัวข้อ 5.2 บอกว่าวาล์วคุม product คือ V-108",fix:"เปลี่ยนวาล์วบน H₂ Product เป็น V-108",ev:"Memo 2 หน้า 8 หัวข้อ 5.2"},
+ {n:3,pts:[[471,213]],tag:"AB-101",t:"FT ที่ AB-101 ควรเป็น PT",s:"wrong",v:"md",f:"FT ต่อเข้าตัว vessel ด้วยเส้นประ",i:"FT วัด flow บนตัว vessel ไม่ได้ และเนื้อหาบอกว่าใช้ PT → PC",fix:"เปลี่ยนเป็น PT และเปลี่ยนเส้นที่ต่อเข้า vessel เป็นเส้นทึบ",ev:"Memo 2 หน้า 7 หัวข้อ 5.1"},
+ {n:4,pts:[[586,213]],tag:"AB-102",t:"PI ที่ AB-102 ควรเป็น PT",s:"wrong",v:"md",f:"PI (Pressure Indicator) ส่งสัญญาณไปที่ PC",i:"PI เป็นแค่เกจ ส่งสัญญาณไม่ได้ และตอนนี้ 2 หอใช้ instrument ไม่เหมือนกัน",fix:"เปลี่ยนเป็น PT ให้สมมาตรกับ AB-101",ev:"Memo 2 หน้า 7 หัวข้อ 5.1"},
+ {n:5,pts:[[716,78]],tag:"H₂ header",t:"FT ตัวที่สองควรเป็น PT",s:"wrong",v:"md",f:"บนเส้น H₂ มี FC–FT และ PC–FT",i:"PC ต้องรับสัญญาณจาก PT",fix:"เปลี่ยน FT ตัวที่คู่กับ PC เป็น PT",ev:"Memo 2 หน้า 8 หัวข้อ 5.2"},
+ {n:6,pts:[[680,35]],tag:"FC + PC → V-106/108",t:"Controller 2 ตัวสั่งวาล์วตัวเดียวกัน",s:"wrong",v:"hi",f:"FC กับ PC ส่งสัญญาณเข้าวาล์วตัวเดียวตรง ๆ",i:"controller 2 ตัวจะแย่งกันคุมวาล์ว",fix:"ทำเป็น cascade (PC ส่ง setpoint ให้ FC) หรือใส่ high/low selector",ev:"P&ID Memo 2 รูปที่ 3"},
+ {n:7,pts:[[697,280]],tag:"H₂ → tail gas",t:"ท่อจาก H₂ ลง tail gas ไม่มีวาล์ว",s:"wrong",v:"hi",f:"มีท่อจาก H₂ header ลงไปที่ tail gas header ตรง ๆ",i:"H₂ product จะรั่วไปที่ tail gas ตลอดเวลา",fix:"ใส่วาล์ว หรือถ้าตั้งใจให้เป็น purge ให้ต่อเข้า top ของหอที่กำลัง regenerate",ev:"P&ID Memo 2 รูปที่ 3"},
+ {n:8,pts:[[685,490]],tag:"Tail gas · V-107",t:"Tail gas loop กลับข้าง",s:"wrong",v:"md",f:"PC ต่อกับท่อ แต่ FI เป็นตัวสั่ง V-107",i:"FI เป็นแค่ indicator สั่งวาล์วไม่ได้",fix:"เปลี่ยนเป็น PT บนท่อ → PC → V-107",ev:"Memo 2 หน้า 8 หัวข้อ 5.3"},
+ {n:9,pts:[[480,373]],tag:"Feed → AB-102",t:"Feed เข้า AB-102 ไม่สมมาตรกับ AB-101",s:"wrong",v:"lo",f:"AB-101 รับ feed ทาง bottom nozzle แต่ AB-102 เข้าทางด้านข้างของ shell",i:"การไหลผ่าน bed ของ 2 หอไม่เหมือนกัน",fix:"ให้ feed เข้าทาง bottom nozzle เหมือน AB-101",ev:"P&ID Memo 2 รูปที่ 3"},
+ {n:10,pts:[[425,320],[533,320]],tag:"AB-101 / AB-102",t:"ไม่มี PSV บน adsorber",s:"wrong",v:"hi",f:"หอทำงานที่ 20 bar แต่ไม่มี relief valve",i:"ถังความดันระดับนี้ต้องมี overpressure protection",fix:"ใส่ PSV ทุกหอ",ev:"Memo 3 (Pressure adsorption 20 bar) · Memo 4"}
+];
+
+function mount(canvasId,detailId,items,W,H){
+  const c=document.getElementById(canvasId),d=document.getElementById(detailId);let cur=0;
+  items.forEach((it,i)=>it.pts.forEach(([x,y])=>{
+    const b=document.createElement('button');b.className='hs';b.textContent=it.n;b.dataset.i=i;
+    b.style.left=(x/W*100)+'%';b.style.top=(y/H*100)+'%';b.setAttribute('aria-label','จุดที่ '+it.n+': '+it.t);
+    b.onclick=()=>show(i);c.appendChild(b);}));
+  function show(i){cur=(i+items.length)%items.length;const it=items[cur];
+    c.querySelectorAll('.hs').forEach(b=>b.classList.toggle('on',+b.dataset.i===cur));
+    d.innerHTML=`<div class="tag">#${it.n} · ${it.tag}</div><h3>${it.t}</h3>
+      <div class="chips">${chip(it.s)}${sev(it.v)}</div>
+      <dl><div><dt>ข้อค้นพบ</dt><dd>${it.f}</dd></div><div><dt>ผลกระทบ</dt><dd>${it.i}</dd></div>
+      <div class="fix"><dt>แนวทางแก้</dt><dd>${it.fix}</dd></div><div><dt>หลักฐาน</dt><dd class="mono" style="font-size:13px;color:var(--dim)">${it.ev}</dd></div></dl>
+      <div class="nav2"><button class="btn" data-a="-1">← ก่อนหน้า</button><span class="mono" style="color:var(--faint);align-self:center">${cur+1}/${items.length}</span><button class="btn" data-a="1">ถัดไป →</button></div>`;
+    d.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>show(cur+ +b.dataset.a));}
+  show(0);
+  d.parentElement.addEventListener('mouseenter',()=>active=show,true);
+  return show;
+}
+let active;
+const showR=mount('r101','r101-detail',R101,620,331);
+const showP=mount('psa-c','psa-detail',PSA,924,590);
+active=showR;
+document.addEventListener('keydown',e=>{
+  if(!['ArrowLeft','ArrowRight'].includes(e.key))return;
+  const psaTop=document.getElementById('psa').getBoundingClientRect().top;
+  const fn=psaTop<innerHeight/2?showP:showR;const box=fn===showR?'r101':'psa-c';
+  const on=document.querySelector('#'+box+' .hs.on');const i=on?+on.dataset.i:0;fn(i+(e.key==='ArrowRight'?1:-1));
+});
+
+/* HAZOP */
+const HZ=[
+ {id:"1A",p:"Temperature · Higher",r:[3,4,"High","rh"],node:"Reactor R-101",s:"wrong",
+  sh:"High-T alarm + fuel cut-off interlock (action: ทดสอบ high-T trip, ลดไฟเมื่อ feed ต่ำ)",
+  fd:"TT/TIC-101 → TCV-101 และ TIC → I-101 → XV-101 มี แต่ตัดแค่ NG ไม่ตัด tail gas และไม่มี TAH/TSHH ระบุในแบบ",
+  todo:"ให้ I-101 ตัด tail gas ด้วย และใส่ TAH/TSHH",ev:"Memo 6 หน้า 32 ตารางที่ 14"},
+ {id:"1B",p:"Temperature · Lower",r:[3,2,"Medium","rm"],node:"Reactor R-101",s:"partial",
+  sh:"Low-T alarm + temperature control (action: calibrate TIC, ทำ procedure ตอน temp ต่ำ)",
+  fd:"TIC-101 → TCV-101 มี แต่ไม่ระบุ TAL",
+  todo:"ใส่ TAL",ev:"Memo 6 หน้า 32"},
+ {id:"2A",p:"Flowrate · Higher",r:[3,3,"Medium","rm"],node:"Feed system",s:"partial",
+  sh:"Flow meter + PLC flow control (action: ตั้ง max feed limit, ประเมิน high-flow alarm/trip)",
+  fd:"FT/FIC-101 → FCV-101 มี แต่ยังไม่มี FAH",
+  todo:"existing safeguard ตรงแล้ว ยังต้องใส่ FAH ตาม recommendation",ev:"Memo 6 หน้า 33"},
+ {id:"2B",p:"Flowrate · Lower",r:[2,3,"Medium","rm"],node:"Feed system",s:"partial",
+  sh:"Flow alarm + reactor high-T alarm (action: ลดไฟ F-101 เมื่อ flow ต่ำ)",
+  fd:"ไม่ระบุ FAL และไม่มีสัญญาณจาก FIC ไปลดไฟ (feed-forward)",
+  todo:"ใส่ FAL และเพิ่ม signal FIC-101 → TIC/fuel ratio",ev:"Memo 6 หน้า 33"},
+ {id:"2C",p:"Flowrate · No",r:[2,5,"High","rh"],node:"Feed system",s:"wrong",
+  sh:"Low-low flow alarm + F-101 shutdown interlock (action: เช็ค shutdown ตอนไฟดับ)",
+  fd:"FIC-101 → I-101 → XV-101 มี แต่ตัดแค่ NG, ไม่มี FALL และไม่ระบุ fail position ของวาล์ว",
+  todo:"ตัดเชื้อเพลิงทุกเส้น ใส่ FALL และระบุ FC/FO",ev:"Memo 6 หน้า 33"},
+ {id:"3A",p:"Pressure · Higher",r:[3,5,"Very High","rv"],node:"Reactor & gas outlet",s:"verify",
+  sh:"PRV + high-P interlock + high-P alarm (action: เช็ค PRV capacity และทาง discharge)",
+  fd:"PSV ไป flare มีแต่ไม่มี tag/set pressure และวาดเส้น discharge เป็นเส้นประ, PIC → I-101 มีแต่ไม่ตัด feed, ไม่ระบุ PAH",
+  todo:"ยืนยันว่า I-101 ทำอะไรบ้าง เพิ่ม feed XV ใส่ PAH และแก้ PSV",ev:"Memo 6 หน้า 34 · สไลด์ 20"},
+ {id:"3B",p:"Pressure · Lower",r:[2,3,"Medium","rm"],node:"Reactor & gas outlet",s:"partial",
+  sh:"Low-P alarm + pressure control (action: ประเมินความเสี่ยง air ingress)",
+  fd:"PIC-101 → PCV มี แต่ไม่ระบุ PAL และไม่มี N₂ purge",
+  todo:"ใส่ PAL และเพิ่ม N₂ connection",ev:"Memo 6 หน้า 34"}
+];
+const hz=document.getElementById('hz');
+hz.innerHTML=HZ.map(h=>`<article class="hrow" data-s="${h.s}">
+  <div class="id"><div class="code">${h.id}</div><span class="risk ${h.r[3]}">L${h.r[0]}×S${h.r[1]} = ${h.r[0]*h.r[1]}</span><span style="font-size:13px;color:var(--dim)">${h.r[2]}</span>${chip(h.s)}</div>
+  <div class="col"><div class="lbl">Deviation · Node</div><h4>${h.p}</h4><p style="color:var(--dim)">${h.node}</p><div class="lbl">แบบควรสะท้อน</div><p>${h.sh}</p></div>
+  <div class="col"><div class="lbl">สิ่งที่พบจริงในแบบ</div><p>${h.fd}</p><div class="lbl">ต้องแก้ / ยืนยัน</div><p>${h.todo}</p><div class="ev">${h.ev}</div></div>
+</article>`).join('');
+document.getElementById('hz-filter').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#hz-filter button').forEach(x=>x.classList.toggle('on',x===b));
+  hz.querySelectorAll('.hrow').forEach(r=>r.classList.toggle('hide',b.dataset.f!=='all'&&r.dataset.s!==b.dataset.f));};
+
+/* counters */
+const cnt=s=>HZ.filter(h=>h.s===s).length;
+const targets={"c-wrong":cnt('wrong'),"c-partial":cnt('partial'),"c-verify":cnt('verify'),"c-find":R101.length};
+function countUp(){for(const[k,v]of Object.entries(targets)){let i=0;const el=document.getElementById(k);const t=setInterval(()=>{el.textContent=++i;if(i>=v)clearInterval(t)},120);if(!v)el.textContent=0;}}
+
+/* todo */
+const TODO=[
+ ["เพิ่มเส้น tail gas และ air เข้า F-101","แล้วให้ I-101 ตัดเชื้อเพลิงทุกเส้น (#1)"],
+ ["เพิ่ม feed XV ให้ I-101 ตัดได้","และแนบตาราง cause & effect (#2)"],
+ ["แก้ nozzle ของ R-101","และวิธีวาดการรับความร้อนจาก F-101 (#4)"],
+ ["แก้ PSV","ใส่ tag/set pressure และเปลี่ยน discharge เป็นเส้นทึบ (#5)"],
+ ["ใส่ tag PCV-101 และ fail position ให้วาล์วทุกตัว","(#6)"],
+ ["ใส่ alarm ตาม HAZOP","และเพิ่ม FAH กับ feed-forward ตาม recommendation 2A/2B (#7)"],
+ ["เพิ่ม N₂ purge, drain/vent และ sample point","(#10)"],
+ ["เพิ่ม BMS / flame detection","(#9, ข้อเสนอเพิ่ม)"],
+ ["แก้ off-page connector และ legend","เปลี่ยน CV-101 เป็น NRV-101 หรือระบุ check valve ใน legend (#8)"]
+];
+const KEY='babe-pid-todo-v1';let done={};
+try{done=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){done={}}
+const ul=document.getElementById('todo-list');
+function renderTodo(){ul.innerHTML=TODO.map((t,i)=>`<li class="${done[i]?'done':''}" data-i="${i}"><input type="checkbox" ${done[i]?'checked':''} aria-label="${t[0]}"><div><b>${i+1}. ${t[0]}</b><small>${t[1]}</small></div></li>`).join('');
+  const n=Object.values(done).filter(Boolean).length;document.getElementById('bar').style.width=(n/TODO.length*100)+'%';
+  document.getElementById('yay').classList.toggle('show',n===TODO.length);}
+ul.onclick=e=>{const li=e.target.closest('li');if(!li)return;const i=li.dataset.i;done[i]=!done[i];
+  try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}renderTodo();
+  if(done[i]&&Object.values(done).filter(Boolean).length===TODO.length)hearts();};
+renderTodo();
+
+function hearts(){for(let i=0;i<40;i++){const h=document.createElement('div');h.textContent=['💛','🎉','✨','💗'][i%4];
+  Object.assign(h.style,{position:'fixed',left:Math.random()*100+'vw',top:'105vh',fontSize:(18+Math.random()*24)+'px',zIndex:99,pointerEvents:'none',transition:`transform ${2+Math.random()*2}s ease-out, opacity 3s`});
+  document.body.appendChild(h);requestAnimationFrame(()=>{h.style.transform=`translateY(-${110+Math.random()*20}vh) rotate(${Math.random()*360}deg)`;h.style.opacity=0});setTimeout(()=>h.remove(),4200);}}
+
+/* reveal + nav */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const links=[...document.querySelectorAll('nav a')];
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>so.observe(s));
+countUp();
+</script>
+</body>
+</html>
