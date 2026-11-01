@@ -6,6 +6,7 @@ const MAX_MSGS = 24, MAX_CHARS = 4000;
 
 const SYSTEM = `คุณคือ Claude ที่แสตมป์ (แฟนของอั๊ย) ตั้งไว้ให้อั๊ยถามเรื่องงาน Capstone Design ของกลุ่ม ETHAVERTEX (โรงงาน bioethanol → hydrogen, จุฬาฯ)
 ตอบเป็นภาษาไทย น้ำเสียงอบอุ่น เป็นกันเอง สุภาพ (เรียกเธอว่า "อั๊ย" แทนตัวเองว่า "Claude") ใช้ศัพท์วิศวกรรมเป็นภาษาอังกฤษตามจริง อธิบายให้เข้าใจง่ายสำหรับนิสิตวิศวกรรมเคมี ตอบกระชับก่อน ถ้าอั๊ยอยากรู้ลึกค่อยขยาย
+อั๊ยอาจแนบรูป (เช่นรูปถ่าย/สกรีนช็อตแบบที่วาด) หรือ PDF มา ให้ดูให้ละเอียด อ่าน tag/เส้นจากรูปจริง และบอกถ้ารูปไม่ชัดตรงไหน
 ถ้าไม่แน่ใจหรือเอกสารไม่ได้ระบุ ให้บอกตรง ๆ และแนะนำให้เช็คกับอาจารย์ อย่าเดาค่า setpoint, design pressure หรือข้อมูลที่เอกสารไม่มี
 
 <context>
@@ -38,10 +39,29 @@ module.exports = async (req, res) => {
   if (pass && (body?.passcode || "") !== pass) { res.status(401).json({ error: "passcode ไม่ถูก" }); return; }
   if (body?.check) { res.status(200).json({ ok: true }); return; }
 
+  const IMG = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  const block = b => {
+    if (!b || typeof b !== "object") return null;
+    if (b.type === "text" && typeof b.text === "string" && b.text.trim()) return { type: "text", text: b.text.slice(0, 62000) };
+    const d = b.source?.data;
+    if (b.source?.type !== "base64" || typeof d !== "string" || !d) return null;
+    if (b.type === "image" && IMG.includes(b.source.media_type)) return { type: "image", source: { type: "base64", media_type: b.source.media_type, data: d } };
+    if (b.type === "document" && b.source.media_type === "application/pdf")
+      return { type: "document", source: { type: "base64", media_type: "application/pdf", data: d }, ...(typeof b.title === "string" ? { title: b.title.slice(0, 200) } : {}) };
+    return null;
+  };
   const msgs = (Array.isArray(body?.messages) ? body.messages : [])
-    .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content.trim())
-    .slice(-MAX_MSGS)
-    .map(m => ({ role: m.role, content: m.content.slice(0, MAX_CHARS) }));
+    .map(m => {
+      if (!m || (m.role !== "user" && m.role !== "assistant")) return null;
+      if (typeof m.content === "string") return m.content.trim() ? { role: m.role, content: m.content.slice(0, MAX_CHARS) } : null;
+      if (m.role === "user" && Array.isArray(m.content)) {
+        const blocks = m.content.slice(0, 12).map(block).filter(Boolean);
+        return blocks.length ? { role: "user", content: blocks } : null;
+      }
+      return null;
+    })
+    .filter(Boolean)
+    .slice(-MAX_MSGS);
   while (msgs.length && msgs[0].role !== "user") msgs.shift();
   if (!msgs.length || msgs[msgs.length - 1].role !== "user") { res.status(400).json({ error: "ไม่มีข้อความ" }); return; }
 
@@ -50,7 +70,7 @@ module.exports = async (req, res) => {
     upstream = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-      body: JSON.stringify({ model: MODEL, max_tokens: 1500, system: SYSTEM, messages: msgs, stream: true }),
+      body: JSON.stringify({ model: MODEL, max_tokens: 2000, system: SYSTEM, messages: msgs, stream: true }),
     });
   } catch (e) { res.status(502).json({ error: "ติดต่อ Claude ไม่ได้: " + e.message }); return; }
 
