@@ -184,6 +184,20 @@ footer .love{font-family:Mitr;font-size:28px;color:var(--pink);margin-bottom:12p
 .dl>b{font-family:"IBM Plex Mono";color:#fff;background:var(--red);border-radius:6px;text-align:center;padding:2px 0;font-size:13px}
 .dl span b{color:var(--ink)}
 .dl span{color:var(--dim)}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.tab{font:inherit;font-size:15px;padding:9px 16px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--dim);cursor:pointer}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.dl.ok>b{background:var(--green);color:#062a1a}
+.faq-h{font-family:Mitr;font-weight:500;font-size:24px;margin:34px 0 12px}
+.faq{display:grid;gap:10px}
+.faq details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 18px}
+.faq details[open]{border-color:rgba(255,143,184,.45)}
+.faq summary{cursor:pointer;font-weight:600;padding:12px 0;font-size:16.5px;list-style:none}
+.faq summary::before{content:"❓ "}
+.faq summary::-webkit-details-marker{display:none}
+.faq p{margin:0 0 14px;color:var(--dim);font-size:15.5px}
+.faq p b{color:var(--ink)}
 </style>
 </head>
 <body>
@@ -282,19 +296,184 @@ footer .love{font-family:Mitr;font-size:28px;color:var(--pink);margin-bottom:12p
 </section>
 
 <section id="answer" class="reveal">
-  <div class="kicker">06 · เฉลยของ Claude · REV B</div>
+  <div class="kicker">06 · เฉลยของ Claude</div>
   <h2>สมมติ Claude ปรับ Claude จะปรับแบบนี้นะอั๊ย ✏️</h2>
-  <p class="lead">กด ▶ เพื่อดู Claude ร่างแบบให้ดูสด ๆ แบบนี้ตั้งบนสมมติฐานว่า R-101 เป็น fired tubular reformer (คำถาม Q1) ส่วน tag ใหม่ทั้งหมดเป็นข้อเสนอ ต้องเช็คกับอาจารย์ก่อนใช้จริงนะ</p>
+  <p class="lead">มีให้ 2 เวอร์ชัน: <b>พื้นฐาน</b> แก้เฉพาะที่ HAZOP ต้องการ อ่านง่าย ส่วน <b>ละเอียด (REV B)</b> ใส่ของแบบโรงงานจริงเพิ่ม ทั้งสองแบบตั้งบนสมมติฐานว่า R-101 เป็น catalyst tube อยู่ใน F-101 ต้องเช็คกับอาจารย์อีกทีนะ</p>
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-v="basic" role="tab">🌱 เวอร์ชันพื้นฐาน (แนะนำ)</button>
+    <button class="tab" data-v="revB" role="tab">🔬 เวอร์ชันละเอียด (REV B)</button>
+  </div>
   <div class="draw-ctrl">
     <button class="btn btn-hot" id="draw-play">▶ วาดให้ดู</button>
     <button class="btn" id="draw-skip">⏭ ข้ามไปภาพนิ่ง</button>
-    <a class="btn" href="assets/r101-revB.png" download>⬇ PNG</a>
-    <a class="btn" href="assets/r101-revB.svg" download>⬇ SVG</a>
+    <a class="btn" id="dl-png" href="assets/r101-basic.png" download>⬇ PNG</a>
+    <a class="btn" id="dl-svg" href="assets/r101-basic.svg" download>⬇ SVG</a>
     <span class="draw-status mono" id="draw-status">พร้อมวาด</span>
   </div>
   <div class="draw-prog"><i id="draw-bar"></i></div>
   <div class="sheet draft" id="revB-wrap">
-    <div class="canvas" id="revB"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 860" role="img" aria-label="P&amp;ID R-101 REV B เฉลย">
+    <div class="canvas" id="cv-basic"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 820">
+<defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#16202b"/></marker><pattern id="cat2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#16202b" stroke-width="1.2"/></pattern></defs>
+<rect width="1400" height="820" fill="#fff"/>
+<g data-step="Feed line · FIC-101 คุม flow · XV-102 ตัด feed">
+<path d="M20,155.0 L156,155.0 L170,170 L156,185.0 L20,185.0 L32,170 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="98.0" y="168" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">From E-104</text>
+<text x="98.0" y="180" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">Superheated feed · 500°C, 1 bar</text>
+<path d="M170,170 L640,170 L640,245" fill="none" stroke="#16202b" stroke-width="1.8" marker-end="url(#ar2)"/>
+<circle cx="230" cy="115" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="210" y1="115" x2="250" y2="115" stroke="#16202b" stroke-width="1.1"/>
+<text x="230" y="111" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">FT</text>
+<text x="230" y="128" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<path d="M230,135 L230,170" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<circle cx="320" cy="70" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="300" y1="70" x2="340" y2="70" stroke="#16202b" stroke-width="1.1"/>
+<text x="320" y="66" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">FIC</text>
+<text x="320" y="83" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<text x="345" y="64" font-size="9.5" text-anchor="start" font-weight="400" fill="#3d4a57" font-family="IBM Plex Mono, monospace">H / L / LL</text>
+<path d="M230,95 L230,70 L300,70" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M311,161 L329,179 L329,161 L311,179 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="320" y1="170" x2="320" y2="150" stroke="#16202b" stroke-width="1.3"/><path d="M309,150 A11 9 0 0 1 331,150 Z" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<text x="320" y="194" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">FCV-101</text>
+<path d="M320,90 L320,150" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M401,162 L417,170 L401,178 Z" fill="#fff" stroke="#16202b" stroke-width="1.4"/><line x1="418" y1="161" x2="418" y2="179" stroke="#16202b" stroke-width="1.6"/>
+<text x="410" y="194" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">NRV-101</text>
+<path d="M501,161 L519,179 L519,161 L501,179 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="510" y1="170" x2="510" y2="154" stroke="#16202b" stroke-width="1.3"/><rect x="497" y="142" width="26" height="12" fill="#fff" stroke="#16202b" stroke-width="1.2"/>
+<text x="510" y="151" font-size="8.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">S</text>
+<text x="510" y="194" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">XV-102</text>
+</g>
+<g data-step="N₂ purge">
+<path d="M482,209.0 L554,209.0 L568,224 L554,239.0 L482,239.0 L494,224 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="528.0" y="228" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">N₂ purge</text>
+<path d="M568,224 L640,224" fill="none" stroke="#16202b" stroke-width="1.8" marker-end="url(#ar2)"/>
+<path d="M594,218 L606,230 L606,218 L594,230 Z" fill="#fff" stroke="#16202b" stroke-width="1.2"/>
+</g>
+<g data-step="F-101 + R-101 catalyst tubes">
+<rect x="580" y="230" width="320" height="330" fill="#fbfaf6" stroke="#16202b" stroke-width="2.2"/>
+<path d="M840,230 L840,205 L880,205 L880,230" fill="#fbfaf6" stroke="#16202b" stroke-width="2"/>
+<path d="M640,245 L790,245" fill="none" stroke="#16202b" stroke-width="2.4"/>
+<rect x="651" y="245" width="18" height="235" fill="url(#cat2)" stroke="#16202b" stroke-width="1.5"/>
+<rect x="696" y="245" width="18" height="235" fill="url(#cat2)" stroke="#16202b" stroke-width="1.5"/>
+<rect x="741" y="245" width="18" height="235" fill="url(#cat2)" stroke="#16202b" stroke-width="1.5"/>
+<path d="M651,480 L840,480 L840,490 L900,490" fill="none" stroke="#16202b" stroke-width="2.4"/>
+<text x="705" y="505" font-size="10.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">R-101 · catalyst tubes</text>
+<text x="705" y="519" font-size="9" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">feed เข้าบน → ผ่าน catalyst → ออกล่าง</text>
+<text x="840" y="272" font-size="16" text-anchor="middle" font-weight="700" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">F-101</text>
+<text x="840" y="289" font-size="9" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">Reformer furnace</text>
+<path d="M670,560 L680,540 L690,560 Z" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<path d="M680,560 L680,620" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M770,560 L780,540 L790,560 Z" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<path d="M780,560 L780,620" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M330,620 L800,620" fill="none" stroke="#16202b" stroke-width="2"/>
+<text x="540" y="612" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">fuel gas header</text>
+<path d="M1170,675.0 L1034,675.0 L1020,690 L1034,705.0 L1170,705.0 L1158,690 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="1098.0" y="694" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">Combustion air</text>
+<path d="M1020,690 L870,690 L870,562" fill="none" stroke="#16202b" stroke-width="1.8" marker-end="url(#ar2)"/>
+</g>
+<g data-step="Flue gas → CCU">
+<path d="M860,205 L860,190 L1250,190" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M1250,175.0 L1366,175.0 L1380,190 L1366,205.0 L1250,205.0 L1262,190 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="1318.0" y="188" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">To CCU</text>
+<text x="1318.0" y="200" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">Flue gas</text>
+</g>
+<g data-step="Syngas outlet · TIC/PIC · PCV-101">
+<path d="M900,490 L1270,490" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M1270,475.0 L1381,475.0 L1395,490 L1381,505.0 L1270,505.0 L1282,490 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="1335.5" y="488" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">To E-101 → R-102</text>
+<text x="1335.5" y="500" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">Syngas</text>
+<circle cx="950" cy="440" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="930" y1="440" x2="970" y2="440" stroke="#16202b" stroke-width="1.1"/>
+<text x="950" y="436" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">TT</text>
+<text x="950" y="453" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<path d="M950,460 L950,490" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<circle cx="1070" cy="440" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="1050" y1="440" x2="1090" y2="440" stroke="#16202b" stroke-width="1.1"/>
+<text x="1070" y="436" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">PT</text>
+<text x="1070" y="453" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<path d="M1070,460 L1070,490" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<circle cx="950" cy="370" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="930" y1="370" x2="970" y2="370" stroke="#16202b" stroke-width="1.1"/>
+<text x="950" y="366" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">TIC</text>
+<text x="950" y="383" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<text x="974" y="344" font-size="9.5" text-anchor="start" font-weight="400" fill="#3d4a57" font-family="IBM Plex Mono, monospace">H / L / HH</text>
+<path d="M950,420 L950,390" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<circle cx="1070" cy="370" r="20" fill="#fff" stroke="#16202b" stroke-width="1.4"/>
+<line x1="1050" y1="370" x2="1090" y2="370" stroke="#16202b" stroke-width="1.1"/>
+<text x="1070" y="366" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">PIC</text>
+<text x="1070" y="383" font-size="9.5" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<text x="1094" y="344" font-size="9.5" text-anchor="start" font-weight="400" fill="#3d4a57" font-family="IBM Plex Mono, monospace">H / L / HH</text>
+<path d="M1070,420 L1070,390" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M1231,481 L1249,499 L1249,481 L1231,499 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="1240" y1="490" x2="1240" y2="470" stroke="#16202b" stroke-width="1.3"/><path d="M1229,470 A11 9 0 0 1 1251,470 Z" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<text x="1240" y="514" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">PCV-101</text>
+<path d="M1090,370 L1240,370 L1240,470" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+</g>
+<g data-step="PSV-101 · Pressure Relief Valve">
+<path d="M1150,490 L1150,450" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M1140,450 L1160,450 L1150,430 Z" fill="#fff" stroke="#16202b" stroke-width="1.6"/>
+<path d="M1150,430 L1170,420 L1170,440 Z" fill="#fff" stroke="#16202b" stroke-width="1.6"/>
+<path d="M1150,430 l-4,-5 l8,-4 l-8,-4 l8,-4 l-4,-4" fill="none" stroke="#16202b" stroke-width="1.3"/>
+<path d="M1170,430 L1195,430 L1195,300 L1250,300" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M1250,285.0 L1356,285.0 L1370,300 L1356,315.0 L1250,315.0 L1262,300 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="1313.0" y="304" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">To Flare</text>
+<rect x="1088" y="508" width="124" height="34" rx="6" fill="#fff4f6" stroke="#d6283f" stroke-width="1.2"/>
+<text x="1150" y="522" font-size="10.5" text-anchor="middle" font-weight="700" fill="#16202b" font-family="IBM Plex Mono, monospace">PSV-101</text>
+<text x="1150" y="535" font-size="8.5" text-anchor="middle" font-weight="400" fill="#8a1c2b" font-family="IBM Plex Sans Thai, sans-serif">Pressure Relief Valve</text>
+</g>
+<g data-step="Fuel: PSA tail gas + natural gas">
+<path d="M20,605.0 L156,605.0 L170,620 L156,635.0 L20,635.0 L32,620 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="98.0" y="618" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">From PS-101</text>
+<text x="98.0" y="630" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">PSA tail gas (เชื้อเพลิงหลัก)</text>
+<path d="M170,620 L330,620" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M291,611 L309,629 L309,611 L291,629 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="300" y1="620" x2="300" y2="604" stroke="#16202b" stroke-width="1.3"/><rect x="287" y="592" width="26" height="12" fill="#fff" stroke="#16202b" stroke-width="1.2"/>
+<text x="300" y="601" font-size="8.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">S</text>
+<text x="300" y="644" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">XV-103</text>
+<path d="M20,725.0 L156,725.0 L170,740 L156,755.0 L20,755.0 L32,740 Z" fill="#eef6ff" stroke="#16202b" stroke-width="1.3"/>
+<text x="98.0" y="738" font-size="10" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">Natural gas makeup</text>
+<text x="98.0" y="750" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">เชื้อเพลิงเสริม</text>
+<path d="M170,740 L600,740 L600,620" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<path d="M291,731 L309,749 L309,731 L291,749 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="300" y1="740" x2="300" y2="724" stroke="#16202b" stroke-width="1.3"/><rect x="287" y="712" width="26" height="12" fill="#fff" stroke="#16202b" stroke-width="1.2"/>
+<text x="300" y="721" font-size="8.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">S</text>
+<text x="300" y="764" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">XV-101</text>
+<path d="M461,731 L479,749 L479,731 L461,749 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<line x1="470" y1="740" x2="470" y2="720" stroke="#16202b" stroke-width="1.3"/><path d="M459,720 A11 9 0 0 1 481,720 Z" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<text x="470" y="764" font-size="9.5" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">TCV-101</text>
+<path d="M950,350 L950,128 L470,128 L470,720" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+</g>
+<g data-step="I-101 Safety Interlock">
+<rect x="700" y="52" width="64" height="56" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<path d="M732,56 L760,80 L732,104 L704,80 Z" fill="#fff" stroke="#16202b" stroke-width="1.5"/>
+<text x="732" y="78" font-size="11" text-anchor="middle" font-weight="700" fill="#16202b" font-family="IBM Plex Mono, monospace">I</text>
+<text x="732" y="93" font-size="9" text-anchor="middle" font-weight="400" fill="#16202b" font-family="IBM Plex Mono, monospace">101</text>
+<text x="732" y="121" font-size="8.5" text-anchor="middle" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">Safety Interlock</text>
+<path d="M320,50 L320,38 L690,38 L690,70 L700,70" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#ar2)"/>
+<path d="M950,128 L950,96 L764,96" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#ar2)"/>
+<path d="M1070,350 L1070,74 L764,74" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4" marker-end="url(#ar2)"/>
+<path d="M732,52 L732,16 L270,16 L270,715" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M270,140 L510,140 L510,142" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M270,592 L300,592" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<path d="M270,712 L300,712" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="775" y="40" font-size="9" text-anchor="start" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">ถ้า flow ต่ำมาก / อุณหภูมิสูงมาก / ความดันสูงมาก</text>
+<text x="775" y="54" font-size="9" text-anchor="start" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">→ ปิด XV-101, XV-102, XV-103 (หยุด feed + ดับไฟ)</text>
+</g>
+<g data-step="Legend">
+<rect x="20" y="770" width="1360" height="40" fill="#fff" stroke="#16202b" stroke-width="1.3"/>
+<path d="M35,791 L75,791" fill="none" stroke="#16202b" stroke-width="1.8"/>
+<text x="82" y="795" font-size="9" text-anchor="start" font-weight="400" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">ท่อ (process line)</text>
+<path d="M200,791 L240,791" fill="none" stroke="#16202b" stroke-width="1.2" stroke-dasharray="5 4"/>
+<text x="247" y="795" font-size="9" text-anchor="start" font-weight="400" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">สายสัญญาณ (signal)</text>
+<rect x="380" y="782" width="20" height="10" fill="#fff" stroke="#16202b"/>
+<text x="390" y="790" font-size="7" text-anchor="middle" font-weight="600" fill="#16202b" font-family="IBM Plex Mono, monospace">S</text>
+<text x="408" y="795" font-size="9" text-anchor="start" font-weight="400" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">วาล์วตัดฉุกเฉิน (shutdown valve)</text>
+<path d="M600,791 A9 7 0 0 1 618,791 Z" fill="#fff" stroke="#16202b"/>
+<text x="625" y="795" font-size="9" text-anchor="start" font-weight="400" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">control valve</text>
+<text x="720" y="795" font-size="9" text-anchor="start" font-weight="400" fill="#3d4a57" font-family="IBM Plex Sans Thai, sans-serif">H / L / HH / LL = alarm สูง / ต่ำ / สูงมาก / ต่ำมาก</text>
+<text x="1370" y="787" font-size="10.5" text-anchor="end" font-weight="700" fill="#16202b" font-family="IBM Plex Sans Thai, sans-serif">P&amp;ID R-101 / F-101 · เวอร์ชันพื้นฐาน</text>
+<text x="1370" y="801" font-size="8.5" text-anchor="end" font-weight="400" fill="#456" font-family="IBM Plex Sans Thai, sans-serif">ETHAVERTEX · for review</text>
+</g></svg></div>
+    <div class="canvas" id="cv-revB" hidden><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 860">
 <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#16202b"/></marker><pattern id="cat" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#16202b" stroke-width="1.2"/></pattern></defs>
 <rect width="1400" height="860" fill="#fff"/>
 <g data-step="Feed line · FT/FIC-101 · FCV-101 + bypass · XV-102">
@@ -556,19 +735,45 @@ footer .love{font-family:Mitr;font-size:28px;color:var(--pink);margin-bottom:12p
 </svg></div>
     <div class="pen" id="pen"></div>
   </div>
-  <div class="deltas">
-    <div class="dl"><b>Δ1</b><span>เพิ่มเส้น <b>PSA tail gas</b> พร้อม XV-103 (FC) และ XV-104 (FO) ไป flare, เพิ่มเส้น combustion air</span></div>
-    <div class="dl"><b>Δ2</b><span>เพิ่ม <b>XV-102</b> (FC) บน feed ให้ I-101 ตัดได้</span></div>
-    <div class="dl"><b>Δ3</b><span>เพิ่ม transmitter แยกสำหรับ trip: <b>FT-102 · TT-102 · PT-102</b></span></div>
-    <div class="dl"><b>Δ4</b><span>วาด <b>R-101 เป็น catalyst tube อยู่ใน F-101</b> ให้ feed เข้าด้านบนและออกด้านล่าง</span></div>
-    <div class="dl"><b>Δ5</b><span><b>PSV-101</b> ใช้เส้นทึบไป flare (set pressure TBC)</span></div>
-    <div class="dl"><b>Δ6</b><span>ใส่ tag <b>PCV-101</b> และระบุ FC/FO ให้วาล์วทุกตัว</span></div>
-    <div class="dl"><b>Δ7</b><span>ใส่ alarm ตาม HAZOP: TAH/TAL, FAH/FAL, FALL, PAH/PAL, TSHH, PSHH</span></div>
-    <div class="dl"><b>Δ8</b><span>Off-page ระบุ From/To ครบ: E-104, E-101→R-102, B-201→CCU, PS-101</span></div>
-    <div class="dl"><b>Δ9</b><span>เพิ่ม flame detection <b>BE-101</b> (BSL→I-101) และ <b>AT-101</b> วัด O₂</span></div>
-    <div class="dl"><b>Δ10</b><span>เพิ่ม <b>N₂ purge</b> พร้อม spectacle blind, vent (V), drain (D) และ sample point SP-101</span></div>
+
+  <div class="vpanel" data-for="basic">
+    <div class="deltas">
+      <div class="dl ok"><b>1</b><span>เพิ่มเส้น <b>PSA tail gas</b> (เชื้อเพลิงหลัก) พร้อมวาล์วตัด XV-103 และเพิ่มเส้น combustion air</span></div>
+      <div class="dl ok"><b>2</b><span>เพิ่ม <b>XV-102</b> บน feed ให้ interlock หยุด feed ได้</span></div>
+      <div class="dl ok"><b>3</b><span>I-101 ตัดทั้ง <b>feed และเชื้อเพลิงทุกเส้น</b> เมื่อ flow ต่ำมาก อุณหภูมิสูงมาก หรือความดันสูงมาก</span></div>
+      <div class="dl ok"><b>4</b><span>R-101 ให้ feed <b>เข้าบน ผ่าน catalyst แล้วออกล่าง</b></span></div>
+      <div class="dl ok"><b>5</b><span><b>PSV-101</b> ปล่อยไป flare ด้วยเส้นทึบ (กรอบแดงในแบบ)</span></div>
+      <div class="dl ok"><b>6</b><span>ใส่ tag ให้ PCV-101 และระบุ alarm H/L ตาม HAZOP</span></div>
+      <div class="dl ok"><b>7</b><span>เพิ่มเส้น <b>N₂ purge</b> ตาม recommendation ของ HAZOP 3B</span></div>
+    </div>
   </div>
-  <div class="note" style="margin-top:20px">ยังต้องยืนยัน: ชนิดของ R-101 (Q1), set pressure ของ PSV (Q4) และ tag ของ FD fan · เส้น feed-forward <span class="mono">FIC-101 → TY-101 → TCV-101</span> ทำตาม recommendation ของ HAZOP 2B</div>
+  <div class="vpanel" data-for="revB" hidden>
+    <div class="deltas">
+      <div class="dl"><b>Δ1</b><span>เพิ่มเส้น <b>PSA tail gas</b> พร้อม XV-103 (FC) และ XV-104 (FO) ไป flare, เพิ่มเส้น combustion air</span></div>
+      <div class="dl"><b>Δ2</b><span>เพิ่ม <b>XV-102</b> (FC) บน feed ให้ I-101 ตัดได้</span></div>
+      <div class="dl"><b>Δ3</b><span>เพิ่ม transmitter แยกสำหรับ trip: <b>FT-102 · TT-102 · PT-102</b></span></div>
+      <div class="dl"><b>Δ4</b><span>วาด <b>R-101 เป็น catalyst tube อยู่ใน F-101</b> ให้ feed เข้าด้านบนและออกด้านล่าง</span></div>
+      <div class="dl"><b>Δ5</b><span><b>PSV-101</b> ใช้เส้นทึบไป flare (set pressure TBC)</span></div>
+      <div class="dl"><b>Δ6</b><span>ใส่ tag <b>PCV-101</b> และระบุ FC/FO ให้วาล์วทุกตัว</span></div>
+      <div class="dl"><b>Δ7</b><span>ใส่ alarm ตาม HAZOP: TAH/TAL, FAH/FAL, FALL, PAH/PAL, TSHH, PSHH</span></div>
+      <div class="dl"><b>Δ8</b><span>Off-page ระบุ From/To ครบ: E-104, E-101→R-102, B-201→CCU, PS-101</span></div>
+      <div class="dl"><b>Δ9</b><span>เพิ่ม flame detection <b>BE-101</b> (BSL→I-101) และ <b>AT-101</b> วัด O₂</span></div>
+      <div class="dl"><b>Δ10</b><span>เพิ่ม <b>N₂ purge</b> พร้อม spectacle blind, vent (V), drain (D) และ sample point SP-101</span></div>
+    </div>
+  </div>
+
+  <h3 class="faq-h">อั๊ยถาม · Claude ตอบ 💬</h3>
+  <div class="faq">
+    <details open><summary>TY คืออะไร?</summary><p><b>TY = Temperature relay</b> (ตัวคำนวณ/รวมสัญญาณ) ใน REV B ใช้เอา flow ของ feed มาช่วยปรับไฟล่วงหน้า (feed-forward) ตอน feed ลดลง ถือเป็นของ advance ไม่จำเป็น เวอร์ชันพื้นฐานเลยตัดออก ให้ <b>TIC-101 สั่ง TCV-101 ตรง ๆ</b> แทน</p></details>
+    <details><summary>AT คืออะไร?</summary><p><b>AT = Analyzer Transmitter</b> เครื่องวัดองค์ประกอบแก๊ส AT-101 วัด O₂ ใน flue gas เพื่อดูว่าเผาไหม้ดีไหม HAZOP ไม่ได้ขอไว้ เวอร์ชันพื้นฐานเลยไม่ใส่</p></details>
+    <details><summary>ทำไมต้องมี bypass?</summary><p>Bypass (ท่อเลี่ยงพร้อมวาล์วมือ) มีไว้ให้<b>ถอดซ่อม control valve ได้โดยไม่ต้องหยุดโรงงาน</b> ระหว่างนั้นเปิด bypass แล้วปรับ flow ด้วยมือไปก่อน เป็น good practice ของแบบจริง แต่ HAZOP ไม่ได้ขอ ระดับวิชานี้<b>ไม่ใส่ก็ได้</b> เวอร์ชันพื้นฐานเลยตัดออก</p></details>
+    <details><summary>ตัวหนังสือสีแดง ๆ หมายถึงอะไร?</summary><p>ไม่ใช่ error นะ มีอยู่ 2 แบบ:<br>
+      <b>① Alarm / trip</b> ตัวอักษรตัวแรกบอกว่าวัดอะไร ตัวท้ายบอกว่าแจ้งเตือนตอนไหน เช่น <span class="mono">TAH</span> = Temperature Alarm High (อุณหภูมิสูง), <span class="mono">FALL</span> = Flow Alarm Low-Low (flow ต่ำมาก), <span class="mono">TSHH / PSHH</span> = ถึงขั้นสูงมากจน interlock สั่งหยุด (trip)<br>
+      <b>② FC / FO</b> = ถ้าไฟหรือลมที่ใช้ขับวาล์วดับ วาล์วจะ<b>ปิดเอง (Fail Closed)</b> หรือ<b>เปิดเอง (Fail Open)</b> เลือกให้ปลอดภัยไว้ก่อน เช่น วาล์วเชื้อเพลิงควรปิดเอง<br>
+      เวอร์ชันพื้นฐานเปลี่ยนเป็นสีเทา ย่อเหลือ <span class="mono">H / L / HH / LL</span> และมีคำอธิบายใน legend</p></details>
+    <details open><summary>รู้สึกว่าไม่มี pressure relief valve?</summary><p>มีอยู่แล้วนะ คือ <b>PSV-101</b> (Pressure Safety Valve เป็นอุปกรณ์เดียวกับ pressure relief valve) ใน REV B สัญลักษณ์เล็กเลยดูไม่ออก ในเวอร์ชันพื้นฐานใส่กรอบแดงให้เห็นชัดแล้ว อยู่บนท่อ syngas หลัง R-101 แล้วปล่อยไป flare<br>
+      ที่วางไว้ตรงนี้เพราะ HAZOP 3A บอกว่าความดันสูงเกิดจาก outlet ตันหรือ<b>วาล์วปลายทางค้างปิด</b> PSV จึงต้องอยู่<b>ก่อน PCV-101</b> เสมอ ถ้าอั๊ยอยากวางไว้บนหัว R-101 เหมือนแบบเดิมก็ได้ ขอแค่ไม่มีวาล์วคั่นระหว่าง R-101 กับ PSV</p></details>
+  </div>
 </section>
 
 <section id="psa" class="reveal">
@@ -781,21 +986,22 @@ const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.f
 document.querySelectorAll('section[id]').forEach(s=>so.observe(s));
 countUp();
 
-/* ===== REV B live drafting ===== */
+
+/* ===== Answer key: live drafting (basic + REV B) ===== */
 (function(){
-  const wrap=document.getElementById('revB-wrap'),svg=wrap.querySelector('svg'),pen=document.getElementById('pen');
-  const status=document.getElementById('draw-status'),bar=document.getElementById('draw-bar');
-  const TOTAL=14000; let anims=[],timers=[],started=false;
-  const els=[...svg.querySelectorAll('g[data-step] *')].filter(e=>['path','line','rect','circle','text'].includes(e.tagName));
-  function reduce(){return matchMedia('(prefers-reduced-motion: reduce)').matches}
+  const wrap=document.getElementById('revB-wrap'),pen=document.getElementById('pen');
+  const status=document.getElementById('draw-status'),bar=document.getElementById('draw-bar'),playBtn=document.getElementById('draw-play');
+  const TOTAL=13000; let anims=[],timers=[],started=false,cur='basic';
+  const canvas=()=>document.getElementById('cv-'+cur);
+  const elsOf=svg=>[...svg.querySelectorAll('g[data-step] *')].filter(e=>['path','line','rect','circle','text'].includes(e.tagName));
+  function reset(svg){elsOf(svg).forEach(e=>{e.style.opacity='';e.style.strokeDasharray='';e.style.strokeDashoffset='';e.style.fillOpacity=''});}
   function clear(){anims.forEach(a=>a.cancel());anims=[];timers.forEach(clearTimeout);timers=[];}
-  function finish(){clear();els.forEach(e=>{e.style.opacity='';e.style.strokeDasharray='';e.style.strokeDashoffset='';e.style.fillOpacity=''});
-    pen.style.opacity=0;wrap.classList.add('done');bar.style.width='100%';status.textContent='เสร็จแล้ว ✓ ภาพนิ่ง REV B';}
+  function finish(){clear();reset(canvas().querySelector('svg'));pen.style.opacity=0;wrap.classList.add('done');bar.style.width='100%';status.textContent='เสร็จแล้ว ✓ ภาพนิ่ง';}
   function play(){
-    clear();wrap.classList.remove('done');started=true;
-    if(reduce()){finish();return;}
-    const sc=wrap.querySelector('.canvas').getBoundingClientRect(),vb=svg.viewBox.baseVal,k=sc.width/vb.width;
-    const plan=els.map(e=>{
+    clear();wrap.classList.remove('done');started=true;playBtn.textContent='↻ วาดใหม่';
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){finish();return;}
+    const svg=canvas().querySelector('svg'),vb=svg.viewBox.baseVal;
+    const plan=elsOf(svg).map(e=>{
       const dashed=e.getAttribute('stroke-dasharray'),stroke=e.getAttribute('stroke'),isText=e.tagName==='text';
       let len=0;try{if(!isText&&e.getTotalLength)len=e.getTotalLength()}catch(_){}
       const kind=isText?'text':(!stroke||stroke==='none')?'pop':dashed?'fade':'draw';
@@ -803,29 +1009,38 @@ countUp();
       return {e,kind,len,dur,step:e.closest('g[data-step]').dataset.step};});
     const raw=plan.reduce((s,p)=>s+p.dur*.55,0),f=TOTAL/raw;let t=300;
     plan.forEach(p=>{p.delay=t;t+=p.dur*.55*f;p.dur*=Math.min(1,Math.max(.4,f));});
-    const end=t+400;let lastStep='';
-    plan.forEach((p,i)=>{
+    const end=t+400;let last='';
+    plan.forEach(p=>{
       const {e,kind,len,dur,delay}=p,o={duration:dur,delay,fill:'both',easing:'ease-out'};
       if(kind==='draw'){e.style.strokeDasharray=len;
         anims.push(e.animate([{strokeDashoffset:len},{strokeDashoffset:0}],o));
         if(e.getAttribute('fill')&&e.getAttribute('fill')!=='none')anims.push(e.animate([{fillOpacity:0},{fillOpacity:1}],{...o,delay:delay+dur*.5}));
         if(e.getAttribute('marker-end'))anims.push(e.animate([{opacity:0},{opacity:1}],{duration:60,delay,fill:'both'}));
-      }else if(kind==='pop'){anims.push(e.animate([{opacity:0,transform:'scale(.2)'},{opacity:1,transform:'scale(1)'}],{...o,easing:'cubic-bezier(.3,1.6,.5,1)',transformOrigin:'center'}));e.style.transformBox='fill-box';e.style.transformOrigin='center';}
+      }else if(kind==='pop'){e.style.transformBox='fill-box';e.style.transformOrigin='center';
+        anims.push(e.animate([{opacity:0,transform:'scale(.2)'},{opacity:1,transform:'scale(1)'}],{...o,easing:'cubic-bezier(.3,1.6,.5,1)'}));}
       else anims.push(e.animate([{opacity:0},{opacity:1}],o));
       timers.push(setTimeout(()=>{
-        if(p.step!==lastStep){lastStep=p.step;status.textContent='กำลังร่าง… '+p.step;}
+        if(p.step!==last){last=p.step;status.textContent='กำลังร่าง… '+p.step;}
         bar.style.width=Math.round(delay/end*100)+'%';
         if(kind!=='text'){let pt;try{pt=len?e.getPointAtLength(len):null}catch(_){}
           if(!pt){const b=e.getBBox();pt={x:b.x+b.width/2,y:b.y+b.height/2};}
-          const r=wrap.querySelector('.canvas').getBoundingClientRect(),kk=r.width/vb.width;
+          const kk=canvas().getBoundingClientRect().width/vb.width;
           pen.style.opacity=1;pen.style.left=(pt.x*kk+10)+'px';pen.style.top=(pt.y*kk+10)+'px';}
       },delay));
     });
     timers.push(setTimeout(finish,end));
   }
-  document.getElementById('draw-play').onclick=()=>{play();document.getElementById('draw-play').textContent='↻ วาดใหม่';};
+  document.querySelectorAll('.tabs .tab').forEach(b=>b.onclick=()=>{
+    if(b.dataset.v===cur)return;clear();reset(canvas().querySelector('svg'));
+    cur=b.dataset.v;document.querySelectorAll('.tabs .tab').forEach(x=>x.classList.toggle('on',x===b));
+    document.querySelectorAll('#revB-wrap .canvas').forEach(c=>c.hidden=c.id!=='cv-'+cur);
+    document.querySelectorAll('.vpanel').forEach(v=>v.hidden=v.dataset.for!==cur);
+    const n=cur==='basic'?'r101-basic':'r101-revB';
+    document.getElementById('dl-png').href='assets/'+n+'.png';document.getElementById('dl-svg').href='assets/'+n+'.svg';
+    play();});
+  playBtn.onclick=play;
   document.getElementById('draw-skip').onclick=finish;
-  const io=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!started){play();document.getElementById('draw-play').textContent='↻ วาดใหม่';io.disconnect();}},{threshold:.35});
+  const io=new IntersectionObserver(es=>{if(es[0].isIntersecting&&!started){play();io.disconnect();}},{threshold:.35});
   io.observe(wrap);
 })();
 </script>
