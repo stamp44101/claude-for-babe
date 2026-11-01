@@ -1110,7 +1110,7 @@ countUp();
 <div class="cb" id="cb" role="dialog" aria-label="แชทกับ Claude">
   <div class="cb-h">
     <div class="av">C</div>
-    <div><b>ถาม Claude ได้เลยอั๊ย</b><small>ส่งรูป / PDF ให้ดูได้ด้วยนะ 📎</small></div>
+    <div><b>ถาม Claude ได้เลยอั๊ย</b><small>ส่งรูป / PDF (≤ 2.2 MB) ให้ดูได้ด้วยนะ 📎</small></div>
     <div class="sp"></div>
     <button class="cb-x" id="cb-clear" title="เริ่มแชทใหม่">ล้าง</button>
     <button class="cb-x" id="cb-close" aria-label="ปิด">✕</button>
@@ -1132,7 +1132,7 @@ countUp();
   <div class="cb-note" id="cb-note"></div>
   <div class="cb-pend" id="cb-pend"></div>
   <form class="cb-f" id="cb-f">
-    <button type="button" class="clip" id="cb-clip" title="แนบรูปหรือไฟล์" aria-label="แนบรูปหรือไฟล์">📎</button>
+    <button type="button" class="clip" id="cb-clip" title="แนบรูปหรือไฟล์ (PDF ไม่เกิน 2.2 MB)" aria-label="แนบรูปหรือไฟล์">📎</button>
     <input type="file" id="cb-file" accept="image/*,.pdf,.txt,.csv,.md,.json" multiple hidden>
     <textarea id="cb-in" rows="1" placeholder="พิมพ์คำถามได้เลย…"></textarea>
     <button id="cb-send" type="submit">ส่ง</button>
@@ -1151,7 +1151,7 @@ countUp();
   const getPass=()=>{try{return localStorage.getItem(PKEY)||''}catch(e){return ''}};
   const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const icon=k=>k==='pdf'?'📄':k==='text'?'📝':'🖼️';
-  const flash=t=>{note.textContent=t;clearTimeout(flash.t);flash.t=setTimeout(()=>note.textContent='',5000);};
+  const flash=t=>{const d=bubble('assistant','⚠️ '+t,null,'err');d.scrollIntoView({block:'end'});};
   function md(t){
     const lines=esc(t).split('\n');let out='',inList=false;
     for(const l of lines){const m=l.match(/^\s*[-•*]\s+(.*)/);
@@ -1166,7 +1166,7 @@ countUp();
   function bubble(role,text,files,cls=''){const d=document.createElement('div');d.className='msg '+(role==='user'?'u':'a')+' '+cls;
     d.innerHTML=role==='user'?attHTML(files)+esc(text).replace(/\n/g,'<br>'):md(text);list.appendChild(d);list.scrollTop=list.scrollHeight;return d;}
   function render(){list.innerHTML='';
-    if(!hist.length)bubble('assistant','สวัสดีอั๊ย 💛 Claude อ่าน P&ID R-101 กับ HAZOP ใน Memo 6 มาแล้ว สงสัยตรงไหนถามได้เลยนะ\nส่งรูปแบบที่วาด หรือไฟล์ PDF มาให้ดูก็ได้ กด 📎 หรือลากไฟล์มาวางในกล่องนี้');
+    if(!hist.length)bubble('assistant','สวัสดีอั๊ย 💛 Claude อ่าน P&ID R-101 กับ HAZOP ใน Memo 6 มาแล้ว สงสัยตรงไหนถามได้เลยนะ\nส่งรูปแบบที่วาด หรือไฟล์ PDF มาให้ดูก็ได้ กด 📎 หรือลากไฟล์มาวางในกล่องนี้\n(PDF ไม่เกิน 2.2 MB ต่อไฟล์ ถ้าใหญ่กว่านั้นแคปเป็นรูปส่งมาแทนนะ)');
     hist.forEach(m=>bubble(m.role,m.content,m.files));chips.style.display=hist.length?'none':'flex';}
 
   /* ---- attachments ---- */
