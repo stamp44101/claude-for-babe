@@ -1076,6 +1076,17 @@ countUp();
 .cb-f textarea:focus{outline:none;border-color:var(--pink)}
 .cb-f button{border:0;border-radius:12px;padding:0 16px;background:var(--pink);color:#2a0a17;font:600 15px inherit;cursor:pointer}
 .cb-f button:disabled{opacity:.5;cursor:default}
+.cb-lock{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:28px;text-align:center}
+.cb-lock[hidden]{display:none}
+.cb-lock .ic{font-size:44px}
+.cb-lock p{margin:0;color:var(--dim)}
+.cb-lock form{display:flex;gap:8px;width:100%;max-width:280px}
+.cb-lock input{flex:1;min-width:0;font:600 20px "IBM Plex Mono",monospace;letter-spacing:4px;text-align:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:10px}
+.cb-lock input:focus{outline:none;border-color:var(--pink)}
+.cb-lock button{border:0;border-radius:12px;padding:0 16px;background:var(--pink);color:#2a0a17;font:600 15px "IBM Plex Sans Thai",sans-serif;cursor:pointer}
+.cb-lock .er{color:#ffb3ba;font-size:14px;min-height:20px}
+.shake{animation:shk .35s}
+@keyframes shk{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
 </style>
 
 <button class="cb-fab" id="cb-fab" aria-label="เปิดแชทถาม Claude">💬 ถาม Claude</button>
@@ -1086,6 +1097,13 @@ countUp();
     <div class="sp"></div>
     <button class="cb-x" id="cb-clear" title="เริ่มแชทใหม่">ล้าง</button>
     <button class="cb-x" id="cb-close" aria-label="ปิด">✕</button>
+  </div>
+  <div class="cb-lock" id="cb-lock" hidden>
+    <div class="ic">🔒</div>
+    <b style="font-family:Mitr;font-weight:500;font-size:20px">ใส่ passcode ก่อนนะอั๊ย</b>
+    <p id="cb-lock-msg">ใส่ครั้งเดียว เครื่องนี้จะจำไว้ให้</p>
+    <form id="cb-lock-f"><input id="cb-pass" type="password" inputmode="numeric" autocomplete="off" placeholder="••••••" aria-label="passcode"><button type="submit">เข้า</button></form>
+    <div class="er" id="cb-lock-er"></div>
   </div>
   <div class="cb-m" id="cb-m"></div>
   <div class="cb-chips" id="cb-chips">
@@ -1131,7 +1149,7 @@ countUp();
     let text='';
     try{
       const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:hist,passcode:getPass()})});
-      if(r.status===401){const p=prompt('ใส่ passcode สำหรับแชท');if(p){try{localStorage.setItem(PKEY,p)}catch(e){}}hist.pop();save();d.remove();list.lastChild&&list.lastChild.remove();send.disabled=false;if(p)ask(q);return;}
+      if(r.status===401){hist.pop();save();send.disabled=false;inp.value=q;try{localStorage.removeItem(PKEY)}catch(e){}lock('passcode เปลี่ยนแล้ว ใส่ใหม่อีกทีนะ');return;}
       if(!r.ok){let m='เกิดข้อผิดพลาด';try{m=(await r.json()).error||m}catch(e){}throw new Error(m);}
       const rd=r.body.getReader(),dec=new TextDecoder();
       for(;;){const {value,done}=await rd.read();if(done)break;text+=dec.decode(value,{stream:true});d.innerHTML=md(text);list.scrollTop=list.scrollHeight;}
@@ -1140,7 +1158,18 @@ countUp();
     }catch(e){d.classList.add('err');d.innerHTML=md('ขอโทษนะอั๊ย ตอนนี้ตอบไม่ได้ 🥲\n`'+e.message+'`');hist.pop();save();}
     send.disabled=false;inp.focus();
   }
-  fab.onclick=()=>{box.classList.add('open');fab.style.display='none';render();setTimeout(()=>inp.focus(),50);};
+  const lk=$('cb-lock'),pin=$('cb-pass'),ler=$('cb-lock-er');
+  const chatParts=[list,chips,$('cb-f')];
+  function lock(msg){lk.hidden=false;chatParts.forEach(e=>e.style.display='none');if(msg)$('cb-lock-msg').textContent=msg;ler.textContent='';pin.value='';setTimeout(()=>pin.focus(),50);}
+  function unlock(){lk.hidden=true;list.style.display='';$('cb-f').style.display='';render();setTimeout(()=>inp.focus(),50);}
+  $('cb-lock-f').onsubmit=async e=>{e.preventDefault();const v=pin.value.trim();if(!v)return;ler.textContent='กำลังเช็ค…';
+    try{const r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({check:true,passcode:v})});
+      if(r.ok){try{localStorage.setItem(PKEY,v)}catch(e){}unlock();return;}
+      let m='passcode ไม่ถูก';try{m=(await r.json()).error||m}catch(e){}
+      ler.textContent=r.status===401?'passcode ไม่ถูก ลองใหม่นะ':m;
+    }catch(err){ler.textContent='เชื่อมต่อไม่ได้ ลองใหม่อีกที';}
+    pin.value='';lk.classList.remove('shake');void lk.offsetWidth;lk.classList.add('shake');pin.focus();};
+  fab.onclick=()=>{box.classList.add('open');fab.style.display='none';if(getPass())unlock();else lock();};
   $('cb-close').onclick=()=>{box.classList.remove('open');fab.style.display='';};
   $('cb-clear').onclick=()=>{hist=[];save();render();};
   $('cb-f').onsubmit=e=>{e.preventDefault();ask(inp.value);};

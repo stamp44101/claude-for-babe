@@ -36,6 +36,7 @@ module.exports = async (req, res) => {
   if (typeof body === "string") { try { body = JSON.parse(body); } catch { body = {}; } }
   const pass = process.env.CHAT_PASSCODE;
   if (pass && (body?.passcode || "") !== pass) { res.status(401).json({ error: "passcode ไม่ถูก" }); return; }
+  if (body?.check) { res.status(200).json({ ok: true }); return; }
 
   const msgs = (Array.isArray(body?.messages) ? body.messages : [])
     .filter(m => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content.trim())
